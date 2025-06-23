@@ -21,3 +21,42 @@ default           Active   28d
 dev               Active   6d22h
 ingress-nginx     Active   27d
 ```
+---
+# Kubernetes Ingress-NGINX Deployment Status
+
+This document provides an overview of the current state of the NGINX Ingress Controller deployment in the `ingress-nginx` namespace.
+
+---
+
+## 📦 Resources Overview
+
+### 🔹 Pods
+
+```bash
+kubectl get pods -n ingress-nginx
+---
+| Name                                      | Status           | Restarts    | Age |
+| ----------------------------------------- | ---------------- | ----------- | --- |
+| ingress-nginx-admission-create-g5w9x      | Completed        | 0           | 27d |
+| ingress-nginx-admission-patch-6vrl8       | Completed        | 0           | 27d |
+| ingress-nginx-controller-5458dd5f6-qdj7w  | Running          | 2 (25d ago) | 27d |
+| ingress-nginx-controller-584d94c577-82dqc | InvalidImageName | 0           | 12m |
+---
+```bash
+kubectl get svc -n ingress-nginx
+---
+
+```bash
+| Name                               | Type         | Cluster IP    | External IP  | Ports                       | Age |
+| ---------------------------------- | ------------ | ------------- | ------------ | --------------------------- | --- |
+| ingress-nginx-controller           | LoadBalancer | 10.109.20.162 | 10.10.37.240 | 80:30705/TCP, 443:30848/TCP | 27d |
+| ingress-nginx-controller-admission | ClusterIP    | 10.96.131.139 | <none>       | 443/TCP                     | 27d |
+```
+---
+🧱 Deployment
+```bash
+kubectl get deploy -n ingress-nginx
+```
+---
+```bash
+
