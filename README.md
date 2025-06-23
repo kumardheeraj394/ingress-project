@@ -77,5 +77,12 @@ kubectl expose deploy sample-4 --type=ClusterIP --port=3000
 ```
 ---
 
+get service
+```bash
+kubectl get svc
+
+```
+---
+
 
 
