@@ -1,6 +1,7 @@
 # ingress-project
 
 This project sets up the NGINX Ingress Controller on a Kubernetes cluster using a manifest hosted in a public GitHub repository.
+https://www.youtube.com/watch?v=pcADx8JFUIA
 
 ## 🔧 Installation
 
