@@ -68,5 +68,14 @@ kubectl create deploy sample-4 --image=devopsprosamples/next-sample-2
 ```
 ---
 
+Create Service for these
+```bash
+kubectl expose deploy sample-1 --type=ClusterIP --port=3000
+kubectl expose deploy sample-2 --type=ClusterIP --port=3000
+kubectl expose deploy sample-3 --type=ClusterIP --port=3000
+kubectl expose deploy sample-4 --type=ClusterIP --port=3000
+```
+---
+
 
 
