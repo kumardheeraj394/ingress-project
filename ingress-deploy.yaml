@@ -117,7 +117,12 @@ spec:
       serviceAccountName: ingress-nginx
       containers:
         - name: controller
-          image: registry.k8s.io/ingress-nginx/controller:v1.12.3
+          image: registry.k8s.io/ingress-nginx/controller:v1.12.3@sha256:ac444cd9515af...
+          env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
           args:
             - /nginx-ingress-controller
             - --publish-service=$(POD_NAMESPACE)/ingress-nginx-controller
@@ -181,7 +186,7 @@ webhooks:
       service:
         name: ingress-nginx-controller-admission
         namespace: ingress-nginx
-        path: /validate-networking-v1-ingress
+        path: /networking/v1/ingresses
     rules:
       - apiGroups: ["networking.k8s.io"]
         apiVersions: ["v1"]
