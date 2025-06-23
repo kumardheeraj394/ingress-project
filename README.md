@@ -59,4 +59,14 @@ kubectl get deploy -n ingress-nginx
 ```
 ---
 
+Create Deployment
+```bash
+kubectl create deploy sample-1 --image=devopsprosamples/next-path-sample-1
+kubectl create deploy sample-2 --image=devopsprosamples/next-path-sample-2
+kubectl create deploy sample-3 --image=devopsprosamples/next-sample-1
+kubectl create deploy sample-4 --image=devopsprosamples/next-sample-2
+```
+---
+
+
 
