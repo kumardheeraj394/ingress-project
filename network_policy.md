@@ -1,44 +1,88 @@
-# Ingress - Egress in Kubernetes
+# Kubernetes Ingress - Egress Overview
 
-![Ingress-Egress Diagram](80af5020-533d-4313-a3a4-3c2dc7264db4.png)
-
-## Overview
-
-In Kubernetes, **Ingress** and **Egress** describe the direction of network traffic:
-
-- **Ingress**: Incoming traffic to a Pod or service.
-- **Egress**: Outgoing traffic from a Pod or service.
+This document explains the concept of **Ingress** and **Egress** traffic in a Kubernetes cluster using a textual (ASCII) diagram.
 
 ---
 
-## Diagram Explanation
+## 📘 Terminology
 
-The diagram depicts the network flow between Pods in a Kubernetes cluster:
+- **Ingress**: Incoming network traffic **to a Pod**.
+- **Egress**: Outgoing network traffic **from a Pod**.
+
+---
+
+## 📊 ASCII Diagram
+
+                     +--------------------+
+                     |      User          |
+                     +--------------------+
+                               |
+                               | Ingress (port 80)
+                               v
+                     +--------------------+
+                     |   Frontend Pod     |
+                     |   (Port: 80)       |
+                     +--------------------+
+                               |
+                               | Egress
+                               v
+                     +--------------------+
+                     |   Backend Pod      |
+                     |   (Port: 3000)     |
+                     +--------------------+
+                               |
+                               | Egress
+                               v
+                     +--------------------+
+                     |   DB Pod           |
+                     |   (Port: 3306)     |
+                     +--------------------+
+
+
+
+---
+
+## 🔁 Traffic Flow Explained
 
 1. **User to Frontend Pod**
-   - **Ingress** occurs at port **80**.
-   - The external user sends HTTP traffic to the **Frontend Pod**.
+   - The user sends a request to the cluster.
+   - This traffic reaches the **Frontend Pod** on port **80** (Ingress).
 
 2. **Frontend Pod to Backend Pod**
-   - The **Frontend Pod** sends **Egress** traffic to the **Backend Pod**.
-   - The **Backend Pod** receives this as **Ingress** traffic on port **3000**.
+   - The frontend service makes a request to the **Backend Pod** on port **3000**.
+   - This is **Egress** from the frontend and **Ingress** to the backend.
 
 3. **Backend Pod to Database Pod**
-   - The **Backend Pod** sends **Egress** traffic to a **Database Pod**.
-   - The **Database Pod** receives this as **Ingress** traffic on port **3306**.
+   - The backend pod queries the **Database Pod** on port **3306**.
+   - This is another **Egress** (from backend) and **Ingress** (to database).
 
 ---
 
-## Key Concepts
+## ✅ Summary
 
-| Term    | Definition                                 |
-|---------|--------------------------------------------|
-| Ingress | Incoming traffic to a Pod or service        |
-| Egress  | Outgoing traffic from a Pod or service      |
+| Pod         | Ingress Port | Egress Target         |
+|-------------|---------------|------------------------|
+| Frontend    | 80            | Backend (port 3000)    |
+| Backend     | 3000          | Database (port 3306)   |
+| Database    | 3306          | None (acts as endpoint)|
 
 ---
 
-## Notes
+## 🔐 Security Consideration
 
-- Managing Ingress and Egress rules is essential for security and connectivity.
-- Kubernetes Network Policies can be used to control allowed Ingress and Egress.
+Use Kubernetes **NetworkPolicies** to define what ingress and egress traffic is allowed for each pod.
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-frontend-ingress
+spec:
+  podSelector:
+    matchLabels:
+      app: frontend
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              role: user
