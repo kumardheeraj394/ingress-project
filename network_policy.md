@@ -86,3 +86,82 @@ spec:
         - podSelector:
             matchLabels:
               role: user
+
+---
+
+# Kubernetes Network Policy and CNI Plugins
+
+To **deploy and enforce** a Kubernetes `NetworkPolicy`, your cluster **must use a CNI (Container Network Interface)** plugin that supports it.
+
+---
+
+## ✅ Supported CNI Plugins for Network Policies
+
+| Category       | Network Plugins That Support NetworkPolicy |
+|----------------|---------------------------------------------|
+| **Antrea**     | - Calico<br> - Cilium                      |
+| **Kube-router**| - Romana<br> - Weave Net                   |
+
+> These CNIs both enable pod-to-pod communication **and** enforce network isolation via Network Policies.
+
+---
+
+## 📘 Why This Matters
+
+Kubernetes provides the `NetworkPolicy` resource to define rules for **pod-level traffic control** (Ingress and Egress), but it does **not enforce** the rules.
+
+👉 The **CNI plugin** is responsible for the **actual enforcement**.
+
+---
+
+## 🚫 Not All CNIs Support NetworkPolicy
+
+For example:
+
+- **Flannel** (default in kubeadm clusters) does **not** support NetworkPolicy by default.
+- Using unsupported CNIs means your policy definitions will be ignored.
+
+---
+
+## 🔐 Sample Network Policy (Only Effective With Supporting CNI)
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-frontend
+spec:
+  podSelector:
+    matchLabels:
+      app: frontend
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: backend
+---
+
+✅ To Use NetworkPolicy Effectively
+Make sure your cluster is using one of these:
+
+ Calico
+
+ Cilium
+
+ Antrea
+
+ Kube-router
+
+ Romana
+
+ Weave Net
+
+📌 Summary
+Kubernetes defines NetworkPolicy.
+
+Your CNI plugin must support it to make it work.
+
+Choose from supported plugins like Calico, Cilium, Weave Net, etc.
+
+Ensure proper CNI installation and configuration before using NetworkPolicy in production clusters.
+---
