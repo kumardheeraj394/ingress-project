@@ -17,22 +17,22 @@ This document explains the concept of **Ingress** and **Egress** traffic in a Ku
                      |      User          |
                      +--------------------+
                                |
-                               | Ingress (port 80)
-                               v
+                               | 
+                               v Ingress (port 80)
                      +--------------------+
                      |   Frontend Pod     |
                      |   (Port: 80)       |
                      +--------------------+
-                               |
                                | Egress
-                               v
+                               | 
+                               v Ingress (port 3000)
                      +--------------------+
                      |   Backend Pod      |
                      |   (Port: 3000)     |
                      +--------------------+
-                               |
                                | Egress
-                               v
+                               | 
+                               v Ingress (port 3306)
                      +--------------------+
                      |   DB Pod           |
                      |   (Port: 3306)     |
