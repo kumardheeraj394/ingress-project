@@ -143,18 +143,51 @@ spec:
 
 ✅ To Use NetworkPolicy Effectively
 Make sure your cluster is using one of these:
+# Kubernetes Network Policy - CNI Plugin Compatibility
 
- Calico
+Kubernetes **Network Policies** allow you to control traffic flow between pods, but they require a **CNI plugin that supports enforcement**.
 
- Cilium
+---
 
- Antrea
+## ✅ Supported CNI Plugins
 
- Kube-router
+These plugins **support NetworkPolicy enforcement** and can be safely used to implement ingress/egress rules.
 
- Romana
+| CNI Plugin   | NetworkPolicy Support  | Notes                                           |
+|--------------|------------------------|-------------------------------------------------|
+| Calico       | ✅ Yes                 | Most popular, highly configurable               |
+| Cilium       | ✅ Yes                 | eBPF-based, high performance                    |
+| Antrea       | ✅ Yes                 | Built on Open vSwitch, supports advanced policy |
+| Kube-router  | ✅ Yes                 | Lightweight router and network policy engine    |
+| Romana       | ✅ Yes                 | Simple L3 network policy plugin                 |
+| Weave Net    | ✅ Yes                 | Easy to set up, supports encryption             |
+| Tigera       | ✅ Yes                 | Enterprise version of Calico                    |
+| OpenShift SDN| ✅ Yes                 | Default CNI in OpenShift clusters               |
 
- Weave Net
+---
+
+## ❌ Unsupported or Partially Supported CNI Plugins
+
+These plugins **do not support** NetworkPolicy out-of-the-box or have limited support.
+
+| CNI Plugin   | NetworkPolicy Support  | Notes                                                  |
+|--------------|------------------------|--------------------------------------------------------|
+| Flannel      | ❌ No (default mode)   | Requires custom setup with `Canal` to support policies |
+| AWS VPC CNI  | ⚠️ Partial             | Ingress supported; Egress not enforced natively        |
+| Azure CNI    | ⚠️ Partial             | Depends on Azure configuration and policy engine       |
+| GKE (legacy) | ⚠️ Partial             | Varies by mode (VPC-native required)                   |
+| Docker (bridge)| ❌ No                | Not meant for production; no policy enforcement        |
+| Host-GW (raw bridge) | ❌ No         | Bare routing with no isolation support                  |
+
+---
+
+## 🔎 How to Check What CNI is Installed
+
+Run this command on your Kubernetes master node:
+
+```bash
+kubectl get pods -n kube-system -o wide
+
 
 📌 Summary
 Kubernetes defines NetworkPolicy.
