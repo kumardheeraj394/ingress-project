@@ -208,6 +208,7 @@ Use Calico or Cilium for rich policy support.
 
 Avoid relying on Flannel unless paired with Canal (Calico + Flannel).
 ---
+---
 
 Case 1: Ingress NetworkPolicy
 
