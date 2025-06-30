@@ -139,6 +139,7 @@ spec:
         - podSelector:
             matchLabels:
               app: backend
+```
 ---
 
 ✅ To Use NetworkPolicy Effectively
