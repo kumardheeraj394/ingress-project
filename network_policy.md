@@ -208,3 +208,105 @@ Use Calico or Cilium for rich policy support.
 
 Avoid relying on Flannel unless paired with Canal (Calico + Flannel).
 ---
+
+Case 1: Ingress NetworkPolicy
+
+             +------------------+
+             |   Database Pod   |
+             |   role: db       |
+             +--------+---------+
+                      ^
+                      |  Allowed (port 6379)
+                      |
+       +--------------+--------------+
+       |              |              |
++------------+  +------------+  +------------+
+| Backend Pod|  | Backend Pod|  | Backend Pod|
+| role:backend| | role:backend| | role:backend|
++-------------+ +-------------+ +-------------+
+
+        Other Pods (e.g., Frontend or no label)
+        +------------------+
+        |    Blocked Pod   |
+        |   (not backend)  |
+        +------------------+
+                 X
+               Denied
+---
+# Kubernetes Network Policy - Case 1
+
+This case demonstrates how to restrict access to a **Database Pod** using Kubernetes NetworkPolicy. Only pods with a label `role: backend` can connect to it.
+
+---
+
+## 📘 NetworkPolicy YAML
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: test-network-policy
+spec:
+  podSelector:
+    matchLabels:
+      role: db
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              role: backend
+      ports:
+        - protocol: TCP
+          port: 6379
+```
+---
+🔐 Behavior Summary
+Applies to: All pods labeled role: db (i.e., the Database Pod).
+
+Allows Ingress From: Pods labeled role: backend.
+
+Port Allowed: 6379/TCP.
+
+All Other Ingress Traffic: Denied by default
+---
+
+             +------------------+
+             |   Database Pod   |
+             |   role: db       |
+             +--------+---------+
+                      ^
+                      |  Allowed (port 6379)
+                      |
+       +--------------+--------------+
+       |              |              |
++------------+  +------------+  +------------+
+| Backend Pod|  | Backend Pod|  | Backend Pod|
+| role:backend| | role:backend| | role:backend|
++-------------+ +-------------+ +-------------+
+
+        Other Pods (e.g., Frontend or no label)
+        +------------------+
+        |    Blocked Pod   |
+        |   (not backend)  |
+        +------------------+
+                 X
+               Denied
+---
+| Source Pod Label | Can Access Database? | Why                        |
+| ---------------- | -------------------- | -------------------------- |
+| `role: backend`  | ✅ Yes                | Matches NetworkPolicy rule |
+| `role: frontend` | ❌ No                 | Not matched in policy      |
+| No label         | ❌ No                 | No match = traffic blocked |
+---
+
+✅ Notes
+This policy controls Ingress to the Database Pod.
+
+All traffic not explicitly allowed is denied.
+
+If you need Egress restrictions, you must define them separately.
+
+---
