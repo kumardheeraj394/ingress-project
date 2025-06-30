@@ -452,3 +452,67 @@ Case 3: Ingress Allowed from Entire Namespace
 ---
 Pods from any other namespace → ❌ Denied
 ---
+This image represents Case 4 of Kubernetes NetworkPolicy usage, where traffic is allowed to the Database Pod from a specific external IP block using an ipBlock rule.
+
+✅ Explanation of Case 4
+📘 NetworkPolicy YAML
+---
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: test-network-policy
+spec:
+  podSelector:
+    matchLabels:
+      role: db
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - ipBlock:
+            cidr: 172.17.0.0/16
+      ports:
+        - protocol: TCP
+          port: 6379
+```
+---
+🔐 What it does:
+Targets pods labeled role: db (Database Pod).
+
+Allows Ingress only from external sources in the CIDR block 172.17.0.0/16.
+
+Only TCP traffic to port 6379 is allowed.
+
+All other ingress traffic is denied.
+
+This policy is often used to allow access from external systems, like a server or an on-premise IP range.
+---
+Case 4: Ingress Allowed from External IP Block
+
+                      +------------------+
+                      |  Database Pod    |
+                      |   role: db       |
+                      +--------+---------+
+                               ^
+                               |  Allowed (TCP 6379)
+                               |
+               From IPs in     |
+               172.17.0.0/16   |
+                               |
+               +-----------------------------+
+               |    External Client System   |
+               |     IP: 172.17.x.x          |
+               +-----------------------------+
+
+     ❌ Any IP not in 172.17.0.0/16 → Denied
+---
+📌 Use Cases
+Expose a Redis-like service (port: 6379) only to a trusted external subnet.
+
+Enable external access from jump hosts, VPN gateways, or monitoring tools.
+
+⚠️ Note: ipBlock only applies to traffic outside the cluster. For internal pod-to-pod traffic, use podSelector or namespaceSelector.
+---
+
