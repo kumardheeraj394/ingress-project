@@ -392,3 +392,58 @@ All other traffic is denied by default.
 ---
 
 ✅ Ensure your CNI plugin (e.g., Calico, Cilium) supports both podSelector and namespaceSelector in NetworkPolicies.
+
+---
+
+This is Case 3 of Kubernetes NetworkPolicy usage, and it's very similar to Case 2, with one key difference: it allows all pods in a specific namespace, regardless of their labels, to access the Database Pod.
+
+✅ Explanation of Case 3
+🔹 What This Network Policy Does:
+---
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: test-network-policy
+spec:
+  podSelector:
+    matchLabels:
+      role: db
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              ns: prod
+```
+---
+✅ Key Behavior:
+Applies to pods with label role: db (the Database Pod).
+
+Allows Ingress from any pod in any namespace that has the label ns=prod.
+
+Does not require pod labels like role: backend.
+---
+
+Case 3: Ingress Allowed from Entire Namespace
+
+              +------------------+
+              |  Database Pod    |
+              |  role: db        |
+              +--------+---------+
+                       ^
+                       |
+                       |  Allowed (Ingress)
+                       |
+           From all pods in namespace: ns=prod
+       +------------------+------------------+
+       |                                  |
++--------------+       +-------------+   +-------------+
+| Any Pod      |       | Any Pod     |   | Any Pod     |
+| in ns=prod   |       | in ns=prod  |   | in ns=prod  |
++--------------+       +-------------+   +-------------+
+
+Pods from any other namespace → ❌ Denied
+---
