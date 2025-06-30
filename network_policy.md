@@ -198,3 +198,11 @@ Choose from supported plugins like Calico, Cilium, Weave Net, etc.
 
 Ensure proper CNI installation and configuration before using NetworkPolicy in production clusters.
 ---
+
+✅ Recommendation
+For production clusters with security requirements:
+
+Use Calico or Cilium for rich policy support.
+
+Avoid relying on Flannel unless paired with Canal (Calico + Flannel).
+---
