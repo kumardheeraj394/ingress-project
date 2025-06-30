@@ -429,6 +429,8 @@ Does not require pod labels like role: backend.
 
 Case 3: Ingress Allowed from Entire Namespace
 ---
+Case 3: Ingress Allowed from Entire Namespace
+
               +------------------+
               |  Database Pod    |
               |  role: db        |
@@ -439,11 +441,14 @@ Case 3: Ingress Allowed from Entire Namespace
                        |
            From all pods in namespace: ns=prod
        +------------------+------------------+
-       |                                  |
-+--------------+       +-------------+   +-------------+
-| Any Pod      |       | Any Pod     |   | Any Pod     |
-| in ns=prod   |       | in ns=prod  |   | in ns=prod  |
-+--------------+       +-------------+   +-------------+
+       |                                     |
++--------------+       +-------------+     +-------------+
+| Any Pod      |       | Any Pod     |     | Any Pod     |
+| in ns=prod   |       | in ns=prod  |     | in ns=prod  |
++--------------+       +-------------+     +-------------+
+
+
+
 ---
 Pods from any other namespace → ❌ Denied
 ---
