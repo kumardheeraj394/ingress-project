@@ -86,7 +86,7 @@ spec:
         - podSelector:
             matchLabels:
               role: user
-
+```
 ---
 
 # Kubernetes Network Policy and CNI Plugins
@@ -187,6 +187,7 @@ Run this command on your Kubernetes master node:
 
 ```bash
 kubectl get pods -n kube-system -o wide
+```
 
 
 📌 Summary
