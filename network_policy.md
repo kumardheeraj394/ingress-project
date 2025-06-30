@@ -311,3 +311,84 @@ All traffic not explicitly allowed is denied.
 If you need Egress restrictions, you must define them separately.
 
 ---
+
+✅ Explanation of Case 2:
+This case demonstrates how to allow traffic to a Database Pod (role: db) only from a specific namespace and pod label combination.
+
+🔐 What the YAML Policy Does:
+---
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: test-network-policy
+spec:
+  podSelector:
+    matchLabels:
+      role: db
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              role: backend
+          namespaceSelector:
+            matchLabels:
+              ns: prod
+```
+---
+Applies to pods with label role: db
+
+Allows Ingress traffic only from:
+
+Pods with label role: backend
+
+Located in the namespace labeled ns: prod
+
+This provides namespace-level and pod-level isolation in one rule.
+---
+
+Case 2: Ingress Policy with Namespace + PodSelector
+
+               +------------------+
+               |   Database Pod   |
+               |   role: db       |
+               +--------+---------+
+                        ^
+                        |  Allowed Ingress
+                        |
+         From Namespace: ns=prod
+         With Label: role=backend
+                        |
+               +------------------+
+               |  Backend Pod     |
+               |  role: backend   |
+               |  ns: prod        |
+               +------------------+
+
+        Other Namespaces or Wrong Labels → Denied
+---
+
+🔐 Policy Behavior
+Selected Pod: role: db (i.e., Database Pod)
+
+Ingress allowed only from:
+
+Pods with label: role: backend
+
+In namespaces labeled: ns: prod
+
+All other traffic is denied by default.
+
+---
+
+| Namespace Label | Pod Label        | Can Access `role=db` Pod? | Reason                        |
+| --------------- | ---------------- | ------------------------- | ----------------------------- |
+| `ns: prod`      | `role: backend`  | ✅ Yes                     | Matches both selectors        |
+| `ns: prod`      | `role: frontend` | ❌ No                      | Pod label doesn't match       |
+| `ns: dev`       | `role: backend`  | ❌ No                      | Namespace label doesn't match |
+---
+
+✅ Ensure your CNI plugin (e.g., Calico, Cilium) supports both podSelector and namespaceSelector in NetworkPolicies.
