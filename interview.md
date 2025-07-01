@@ -1,5 +1,6 @@
 ---
 🟢 Beginner Level
+---
 What is Kubernetes?
 
 What is a Pod in Kubernetes?
@@ -19,8 +20,10 @@ What is a Namespace in Kubernetes?
 How does Kubernetes perform load balancing?
 
 What is kubelet and what does it do?
+
 ---
 🟡 Intermediate Level
+---
 What is the difference between Deployment, StatefulSet, and DaemonSet?
 
 How does a headless service work in Kubernetes?
@@ -40,8 +43,10 @@ What is the role of etcd in Kubernetes?
 How does Kubernetes handle persistent storage (PVC, PV)?
 
 How do you secure a Kubernetes cluster?
+
 ---
 🔴 Advanced Level
+---
 How does the Kubernetes control plane work?
 
 What happens when you run kubectl apply -f myapp.yaml?
