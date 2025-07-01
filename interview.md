@@ -3,8 +3,41 @@
 ---
 What is Kubernetes?
 
-What is a Pod in Kubernetes?
+✅ Answer (English):
+Kubernetes is an open-source container orchestration platform that automates the deployment, scaling, and management of containerized applications. It helps manage clusters of machines running containers, such as Docker, and makes it easier to run applications reliably at scale.
 
+Kubernetes takes care of:
+
+Automatically restarting failed containers
+
+Load balancing traffic
+
+Scaling apps based on demand
+
+Managing configurations and secrets
+
+Rolling out updates without downtime
+
+It was originally developed by Google and is now maintained by the Cloud Native Computing Foundation (CNCF).
+
+🇮🇳 उत्तर (Hindi):
+Kubernetes एक ओपन-सोर्स कंटेनर ऑर्केस्ट्रेशन प्लेटफ़ॉर्म है, जो कंटेनराइज्ड एप्लिकेशन के डिप्लॉयमेंट, स्केलिंग और मैनेजमेंट को ऑटोमेट करता है। यह डॉकर जैसे कंटेनर को कई मशीनों पर मैनेज करने का काम आसान बनाता है।
+
+Kubernetes ये काम करता है:
+
+फेल हुए कंटेनर्स को अपने आप फिर से स्टार्ट करना
+
+ट्रैफिक को बैलेंस करना (लोड बैलेंसिंग)
+
+डिमांड के अनुसार ऐप को स्केल करना
+
+सीक्रेट्स और कॉन्फ़िगरेशन को मैनेज करना
+
+बिना डाउनटाइम के अपडेट रोलआउट करना
+
+---
+What is a Pod in Kubernetes?
+---
 What is the difference between a Pod and a Container?
 
 What is a Deployment?
